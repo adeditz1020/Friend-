@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mera Confession 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* screenshot deterrence */
+@media print{*{display:none!important}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+textarea,input{-webkit-user-select:text!important;user-select:text!important}
+
+body{
+  font-family:'Lora',Georgia,serif;
+  color:#fff;
+  background:linear-gradient(135deg,#1c0a20,#4a1040,#7a2060,#300d35);
+  background-size:400% 400%;
+  animation:bgPulse 18s ease infinite;
+  overflow:hidden;height:100vh;
+}
+@keyframes bgPulse{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* blur on visibility loss */
+body.blurred .page-content{filter:blur(18px);transition:filter .2s}
+
+/* particles */
+.bgp{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;animation:floatUp linear infinite;opacity:0;pointer-events:none}
+@keyframes floatUp{0%{opacity:0;transform:translateY(100vh) rotate(0)}10%{opacity:.7}90%{opacity:.5}100%{opacity:0;transform:translateY(-15vh) rotate(360deg)}}
+canvas#fw{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+/* pages */
+.page{position:absolute;inset:0;display:none;align-items:flex-start;justify-content:center;padding:38px 18px 64px;overflow-y:auto;z-index:2}
+.page.active{display:flex}
+.page-content{width:min(94vw,680px);margin:auto}
+
+/* gate & expired */
+#gate,#expired{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1c0a20,#4a1040,#7a2060);padding:20px}
+#expired{display:none}
+.g-card{width:min(92vw,400px);padding:36px 26px;border:1px solid #ffffff33;border-radius:28px;background:rgba(255,255,255,.12);backdrop-filter:blur(18px);box-shadow:0 25px 80px rgba(0,0,0,.6);text-align:center}
+.g-icon{font-size:62px;margin-bottom:14px;display:block}
+.g-h{font-family:'Dancing Script',cursive;font-size:30px;margin-bottom:8px}
+.g-sub{font-size:15px;opacity:.82;margin-bottom:24px;line-height:1.7;font-family:'Lora',serif;font-style:italic}
+.g-inp{width:100%;padding:14px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.13);color:#fff;font-size:18px;text-align:center;letter-spacing:3px;outline:none;margin-bottom:14px;font-family:'Lora',serif;transition:.3s;-webkit-user-select:text!important;user-select:text!important}
+.g-inp::placeholder{color:rgba(255,255,255,.45);letter-spacing:1px;font-size:14px}
+.g-inp:focus{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.6)}
+.g-btn{width:100%;padding:14px;border:0;border-radius:999px;background:#fff;color:#7d2a5e;font-size:17px;font-weight:bold;cursor:pointer;font-family:'Lora',serif;box-shadow:0 8px 25px rgba(0,0,0,.3);transition:.25s}
+.g-btn:hover{transform:scale(1.03)}
+.g-err{color:#ffb3c6;font-size:14px;margin-top:10px;min-height:20px;font-style:italic}
+
+/* card */
+.card{padding:32px 26px;border:1px solid #ffffff2a;border-radius:28px;background:rgba(255,255,255,.1);backdrop-filter:blur(16px);box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:center}
+
+/* entrance */
+.main-title{font-family:'Dancing Script',cursive;font-size:clamp(46px,12vw,90px);font-weight:700;line-height:1.1;background:linear-gradient(135deg,#ffecd2,#fcb69f,#ff9a9e,#fad0c4,#ffecd2);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite;text-shadow:none;margin-bottom:6px;display:block}
+@keyframes shimmer{to{background-position:300% center}}
+.sub-tag{font-size:13px;letter-spacing:5px;text-transform:uppercase;opacity:.75;margin-bottom:20px;font-family:'Lora',serif}
+
+/* page headings */
+.page-h{font-family:'Playfair Display',serif;font-size:clamp(22px,5.5vw,36px);font-style:italic;margin-bottom:20px;line-height:1.3;color:#ffecd2}
+
+/* body text - script style */
+.msg{font-family:'Lora',serif;font-size:17px;line-height:2;text-align:left;margin-bottom:18px;font-style:italic;color:rgba(255,255,255,.93)}
+.msg p{margin-bottom:14px}
+.msg b{font-style:normal;color:#ffd6c8}
+.highlight{background:rgba(255,255,255,.1);border-left:3px solid #ffb3c6;border-radius:0 12px 12px 0;padding:14px 18px;margin:16px 0;font-size:18px;line-height:1.9;font-style:italic;color:#ffecd2}
+
+/* reply */
+.reply-wrap{margin-top:24px;text-align:left}
+.r-label{font-size:13px;letter-spacing:2px;opacity:.75;margin-bottom:10px;display:block;font-family:'Lora',serif}
+textarea.r-box{width:100%;min-height:115px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:14px;color:#fff;font-size:16px;font-family:'Lora',serif;font-style:italic;resize:vertical;outline:none;transition:.3s;-webkit-user-select:text!important;user-select:text!important}
+textarea.r-box::placeholder{color:rgba(255,255,255,.42)}
+textarea.r-box:focus{background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.55)}
+
+/* buttons */
+.nbtn{display:inline-block;margin-top:16px;border:0;border-radius:999px;padding:13px 32px;font-size:16px;font-weight:600;font-family:'Lora',serif;background:#fff;color:#7d2a5e;cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,.3);transition:.25s}
+.nbtn:hover{transform:scale(1.05)}
+.arrow-btn{display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;border:2px solid #ffffff77;background:rgba(255,255,255,.14);cursor:pointer;animation:bob 1.6s ease-in-out infinite;font-size:24px;transition:.3s;color:#fff;outline:none;font-family:serif}
+.arrow-btn:hover{background:rgba(255,255,255,.28)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* final */
+.heart-big{font-size:72px;animation:heartbeat 1.3s ease-in-out infinite;display:block;margin-bottom:14px}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+@media(max-width:500px){
+  .card{padding:22px 15px}
+  .msg{font-size:15px}
+  textarea.r-box{font-size:15px;min-height:95px}
+  .main-title{font-size:clamp(40px,13vw,72px)}
+}
+</style>
+</head>
+<body>
+<div class="bgp" id="bgp"></div>
+<canvas id="fw"></canvas>
+
+<!-- EXPIRED -->
+<div id="expired">
+  <div class="g-card">
+    <span style="font-size:64px;display:block;margin-bottom:14px">🔒</span>
+    <div class="g-h">Link Expire Ho Gayi</div>
+    <p class="g-sub">Ye link ab valid nahi rahi.<br>Sender se rabta karein. 🤍</p>
+  </div>
+</div>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="g-card">
+    <span class="g-icon">🔑</span>
+    <div class="g-h">Private Message 💌</div>
+    <p class="g-sub">Ye sirf aapke liye hai.<br>Password enter karein to open karein.</p>
+    <input class="g-inp" id="pwInp" type="password" placeholder="Password likhiye…" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="g-btn" onclick="checkPw()">Open ❤️</button>
+    <div class="g-err" id="pwErr"></div>
+  </div>
+</div>
+
+<!-- P1: Entrance -->
+<section class="page active" id="p1">
+  <div class="page-content">
+    <div class="card" style="padding-bottom:36px">
+      <div class="sub-tag">💌 Sirf tumhare liye 💌</div>
+      <span class="main-title">Mera Confession</span>
+      <div style="font-size:38px;margin:10px 0 20px">🌸🤍🌸</div>
+      <div class="msg">
+        <p>Insha — main janta hoon aap meri kal wali baat se bahut hurt hue ho, iski liye dil se sorry yaar.</p>
+        <p>Mera kehne se murad wo nahi tha.</p>
+        <p>Main tumhe bahut acha samajhta hoon — agar tum meri dost na bhi hoti, phir bhi yaar main ladki ke baare mein aisi soch nahi rakhta.</p>
+        <p>Tum to dost ho, bahut azeez ho — tumhe force nahi karna chahta main. 🤍</p>
+      </div>
+      <div class="reply-wrap">
+        <span class="r-label">✍️ Jo bhi dil mein aaye likh do (no word limit)</span>
+        <textarea class="r-box" id="r1" placeholder="Yahan likh sakti ho…"></textarea>
+        <button class="nbtn" onclick="go('Pehla Jawab','r1','p2')">Aage → </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- P2: Pasand wali baat -->
+<section class="page" id="p2">
+  <div class="page-content">
+    <div class="card">
+      <div style="font-size:40px;margin-bottom:14px">💫🤝</div>
+      <div class="page-h">Tum alag ho sabse…</div>
+      <div class="msg">
+        <p>Yaar tum mujhe bahut pasand ho — aur iski waja ye hai ke tum agar kisi ko importance deti ho, to poori loyalty ke sath.</p>
+        <p>Jab se main hoon tumhari zindagi mein — tumne kisi aur ko dost nahi banaya, ek larki ko bhi nahi. <b>Zainab</b> ka bola, usse bhi nahi. Ye cheez tumhe doosron se bilkul alag karti hai.</p>
+        <p>Aur jahan tak 2nd option ki baat hai — yaar wo galti ho gayi, meri dimag mein nahi aani chahiye thi. Main aisa sochta hi nahi hoon tumhare baare mein.</p>
+      </div>
+      <div class="highlight">
+        Yaar agar main aisa sochoon to dost to na hua, aur jo galat hai wo main seedha tumhare munh pe bolunga — is pe sorry, aage khayal rakhunga. Aisi baat bilkul nahi karoonga.
+      </div>
+      <div style="margin:18px 0;padding:18px 20px;background:rgba(255,255,255,.13);border-radius:16px;border:2px solid #ffb3c6;text-align:center">
+        <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;line-height:1.9;color:#fff">
+          Aur agar baat <b style="color:#ffd6c8;font-size:18px">2nd option</b> ki ho bhi naa —<br>
+          <span style="color:#ffecd2">tumhare case mein mujhe koi issue nahi hona.</span><br><br>
+          <b style="font-size:19px;color:#ffb3c6;letter-spacing:.5px">But main jaanta hoon… aisa kabhi nahi ho sakta. 🤍</b><br>
+          <span style="opacity:.85;font-size:15px">Isliye main ye soch hi nahi rakhta apne dimag mein.</span>
+        </p>
+      </div>
+      <div class="reply-wrap">
+        <span class="r-label">✍️ Aapka jawab…</span>
+        <textarea class="r-box" id="r2" placeholder="Yahan likh sakti ho…"></textarea>
+        <button class="nbtn" onclick="go('Doosra Jawab','r2','p3')">Aage →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- P3: Kiss wali sorry -->
+<section class="page" id="p3">
+  <div class="page-content">
+    <div class="card">
+      <div style="font-size:40px;margin-bottom:14px">🥹🌸</div>
+      <div class="page-h">Aur pehle us cheez ki sorry…</div>
+      <div class="msg">
+        <p>Wo achanak hua — main khud ko control nahi kar saka. Sorry.</p>
+        <p>But wo life ke 3 seconds bahut memorable hain. Wo ehsaas mujhe bahut zyada acha laga — main ye kabhi nahi bhoolonga. Tumhari 1st kiss li hai, ye apni biwi ko bhi bataunga 😊. Aur shukriya ke thapar nahi mara!</p>
+        <p>Baad mein afsos bhi hua ke nahi karna chahiye tha — lekin sach mein, Insha, wo bahut jaldi hua, kehna to chahiye tha… pata nahi. Lekin shukriya. 😊</p>
+      </div>
+      <div class="highlight">
+        Tumhare saath time spend karna bahut acha lagta hai — sakoon milta hai. Bahut acha feel hota hai. Main nahi chahta ke ye khatam ho. Tab khatam karna jab Sikandar se mangni/shadi karle — phir beshak na milna mujhse. Lekin abhi na karo. <b>Tum ab aadat ho, samjhi? ❤️</b>
+      </div>
+      <div class="reply-wrap">
+        <span class="r-label">✍️ Aapka jawab…</span>
+        <textarea class="r-box" id="r3" placeholder="Yahan likh sakti ho…"></textarea>
+        <button class="nbtn" onclick="go('Teesra Jawab','r3','p4')">Aage →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- P4: Summary -->
+<section class="page" id="p4">
+  <div class="page-content">
+    <div class="card">
+      <div style="font-size:40px;margin-bottom:14px">💬🤍</div>
+      <div class="page-h">Iss message ka khulasa…</div>
+      <div class="msg">
+        <p>Is message ka khulasa ye hai ke main kal raat jo bhi kuch hua, uski liye dil se sorry karta hoon — main nahi chahta ke tum door ho ya baat bhi na karo.</p>
+        <p>Khud kehti ho aadat hoon main tumhari — aur khud door karti ho. 😑</p>
+        <p>Ho sakta hai ke tum bhi meri aadat ho. Main tumhe door nahi kar sakta. 🤍</p>
+      </div>
+      <div class="reply-wrap">
+        <span class="r-label">✍️ Aapka jawab…</span>
+        <textarea class="r-box" id="r4" placeholder="Yahan likh sakti ho…"></textarea>
+        <button class="nbtn" onclick="go('Chautha Jawab','r4','p5')">Aage →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- P5: Final -->
+<section class="page" id="p5">
+  <div class="page-content">
+    <div class="card">
+      <span class="heart-big">🤝</span>
+      <div class="page-h">Ek Last Request… 🥺</div>
+      <div class="msg" style="text-align:center">
+        <p>Agar sorry qabool ki hai — to main chahta hoon sab normal ho jaye.</p>
+        <p>Hum wapis acche dost ban jayein, ye baat bhool ke jaise ye hua hi na ho. 🤍</p>
+        <p style="font-size:19px"><b>Insha — best friend? 🥺</b></p>
+      </div>
+      <div class="reply-wrap">
+        <span class="r-label">✍️ Tumhara final jawab… (ye unhe pahunch jayega 🤍)</span>
+        <textarea class="r-box" id="r5" placeholder="Yahan likh sakti ho…" style="min-height:130px"></textarea>
+        <button class="nbtn" onclick="submitFinal()">Bhej Do 💌</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- P6: Sent -->
+<section class="page" id="p6">
+  <div class="page-content">
+    <div class="card" style="text-align:center;padding:48px 26px">
+      <span style="font-size:72px;display:block;margin-bottom:16px">💌</span>
+      <div class="page-h">Shukriya 🤍</div>
+      <p class="msg" style="text-align:center;font-size:18px">Aapka jawab pahunch gaya.<br>Allah aap dono ko hamesha acche dost rakhe. 🌸</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== SECURITY =====
+const EXPIRY = new Date('2026-10-25T23:59:59');
+const PW = 'best friend';
+
+(function(){
+  if(new Date() > EXPIRY){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('expired').style.display='flex';
+  }
+})();
+
+function checkPw(){
+  const v=(document.getElementById('pwInp').value||'').trim().toLowerCase();
+  if(v===PW){
+    document.getElementById('gate').style.display='none';
+  } else {
+    document.getElementById('pwErr').textContent='❌ Password galat hai, dobara try karein';
+    document.getElementById('pwInp').value='';
+    document.getElementById('pwInp').focus();
+  }
+}
+
+// blur on tab switch (screenshot deterrence)
+document.addEventListener('visibilitychange',function(){
+  document.body.classList.toggle('blurred',document.hidden);
+});
+
+// disable right-click
+document.addEventListener('contextmenu',function(e){e.preventDefault()});
+
+// ===== PAGES =====
+const reps={};
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  try{window.scrollTo(0,0)}catch(e){}
+}
+
+function openWA(text){
+  try{
+    const a=document.createElement('a');
+    a.href='https://wa.me/923290698838?text='+encodeURIComponent(text);
+    a.target='_blank';a.rel='noopener noreferrer';
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{try{document.body.removeChild(a)}catch(e){}},300);
+  }catch(e){}
+}
+
+function sendEmail(){
+  try{
+    const msg=Object.entries(reps).map(([k,v])=>'--- '+k+' ---\n'+v).join('\n\n');
+    fetch('https://formspree.io/f/mrpgddya',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({subject:'Insha ka jawab - Apology Message',message:msg})
+    }).catch(()=>{});
+  }catch(e){}
+}
+
+function go(label,tid,toId){
+  try{
+    const v=(document.getElementById(tid)||{}).value||'';
+    show(toId);
+    if(v.trim()){
+      reps[label]=v.trim();
+      sendEmail();
+      setTimeout(()=>openWA('*'+label+'*\n\n'+v.trim()),600);
+    }
+  }catch(e){try{show(toId)}catch(e2){}}
+}
+
+function submitFinal(){
+  try{
+    const v=(document.getElementById('r5')||{}).value||'';
+    if(v.trim()) reps['Final Jawab']=v.trim();
+    sendEmail();
+    show('p6');
+    setTimeout(()=>{
+      const all=Object.entries(reps).map(([k,v])=>'*'+k+':*\n'+v).join('\n\n──────────\n\n');
+      openWA('Insha ka jawab:\n\n'+all);
+    },700);
+  }catch(e){try{show('p6')}catch(e2){}}
+}
+
+// ===== FIREWORKS =====
+const cv=document.getElementById('fw'),cx=cv.getContext('2d');
+function rs(){cv.width=innerWidth;cv.height=innerHeight}rs();
+addEventListener('resize',rs);
+const cl=['#ffb3c6','#ffd166','#ff8fb1','#c9a0ff','#ffc8dd','#ffe4b5','#e8bbff'];
+let rk=[],sp=[];
+function lr(){rk.push({x:Math.random()*cv.width,y:cv.height,ty:cv.height*(0.1+Math.random()*.38),vy:-(5.5+Math.random()*3),c:cl[~~(Math.random()*cl.length)],t:[]})}
+function ex(x,y,c){for(let i=0;i<48;i++){const a=Math.PI*2*i/48+Math.random()*.3,s=1.5+Math.random()*3.2;sp.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,a:1,c,sz:1.4+Math.random()*1.7,g:.04})}}
+function anim(){
+  cx.globalCompositeOperation='destination-out';cx.fillStyle='rgba(0,0,0,0.17)';cx.fillRect(0,0,cv.width,cv.height);
+  cx.globalCompositeOperation='lighter';
+  rk.forEach((r,i)=>{
+    r.t.push({x:r.x,y:r.y});if(r.t.length>6)r.t.shift();
+    r.y+=r.vy;r.vy+=.03;
+    r.t.forEach((t,ti)=>{cx.beginPath();cx.arc(t.x,t.y,1.1*(ti/r.t.length),0,Math.PI*2);cx.fillStyle=r.c;cx.globalAlpha=.35*(ti/r.t.length);cx.fill();cx.globalAlpha=1});
+    cx.beginPath();cx.arc(r.x,r.y,2,0,Math.PI*2);cx.fillStyle=r.c;cx.fill();
+    if(r.y<=r.ty||r.vy>=0){ex(r.x,r.y,r.c);rk.splice(i,1)}
+  });
+  sp.forEach((s,i)=>{
+    s.x+=s.vx;s.y+=s.vy;s.vy+=s.g;s.vx*=.986;s.a-=.013;
+    if(s.a<=0){sp.splice(i,1);return}
+    cx.beginPath();cx.arc(s.x,s.y,s.sz,0,Math.PI*2);cx.fillStyle=s.c;cx.globalAlpha=Math.max(s.a,0);cx.fill();cx.globalAlpha=1;
+  });
+  requestAnimationFrame(anim);
+}
+anim();setInterval(lr,1000);lr();setTimeout(lr,500);
+
+// ===== PARTICLES =====
+const bg=document.getElementById('bgp');
+['💗','✨','🌸','💫','🌹','🤍','💕'].forEach(e=>{
+  for(let j=0;j<4;j++){
+    const d=document.createElement('div');d.className='particle';d.textContent=e;
+    d.style.left=Math.random()*100+'%';d.style.fontSize=(11+Math.random()*14)+'px';
+    d.style.animationDuration=(8+Math.random()*10)+'s';d.style.animationDelay=(-Math.random()*12)+'s';
+    bg.appendChild(d);
+  }
+});
+</script>
+</body>
+</html>
